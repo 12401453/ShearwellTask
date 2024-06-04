@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ShearwellTask.GroupSummaryPage"
+             xmlns:viewmodels="clr-namespace:ShearwellTask"
+             x:DataType="viewmodels:GroupSummaryViewModel"
+             Title="">
+
+    <ContentPage.BindingContext>
+        <viewmodels:GroupSummaryViewModel/>
+    </ContentPage.BindingContext>
+
+    <ContentPage.Resources>
+        <DataTemplate x:Key="groupsSummaryTemplate" x:DataType="viewmodels:Group">
+            <Border BackgroundColor="#071022" 
+                   WidthRequest="200" 
+                    StrokeShape="RoundRectangle 7"
+                    Stroke="Black"
+                    StrokeThickness="2"
+                    Padding="10">
+                <Grid RowDefinitions="40, 40, 20" ColumnDefinitions="*" HorizontalOptions="Center">
+
+                    <Label Grid.Row="0" Text="{Binding Name}" FontSize="20" FontAttributes="None"/>
+                    <Label BackgroundColor="#071022" Grid.Row="1" Text="{Binding AnimalsCount, StringFormat='Members: {0}'}" FontSize="15"/>
+                    <Label Grid.Row="2" Text="{Binding DateString}" FontSize="15"/>
+
+                </Grid>
+               <Border.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:GroupSummaryViewModel}}, Path=GroupTappedCommand}" CommandParameter="{Binding GroupFlag}"
+                              NumberOfTapsRequired="1" />
+                </Border.GestureRecognizers>
+            </Border>
+
+        </DataTemplate>
+
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="60, *, 90"
+          ColumnDefinitions="*, *"
+          Padding="10"
+          RowSpacing="10"
+          ColumnSpacing="10"
+          Margin="0">
+
+        <Label VerticalOptions="Center" Grid.Row="0" Grid.ColumnSpan="2" 
+             Text="Groups"
+            FontAttributes="None"
+            TextColor="#cbd9f4"
+            FontSize="30"
+            FontFamily="Calibri"/>
+
+
+
+        <Border BackgroundColor="#172136" Stroke="Black" StrokeShape="RoundRectangle 7"
+                Grid.Row="1" Padding="10" Margin="20,0,20,0" Grid.ColumnSpan="2">
+            <CollectionView SelectionMode="None"
+                            ItemTemplate="{StaticResource groupsSummaryTemplate}"
+                            ItemsSource="{Binding Groups}"
+                            VerticalScrollBarVisibility="Default">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="6"/>
+                </CollectionView.ItemsLayout>
+      
+            </CollectionView>
+        </Border>
+
+        <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                BackgroundColor="#512bd4"
+                TextColor="#cbd9f4"
+                BorderColor="Black"
+                BorderWidth="2"
+                Text="Add new animal"
+                FontFamily="Calibri"
+                FontSize="19"
+                Pressed="AddButtonPressed"
+                HeightRequest="60"
+                VerticalOptions="Center"
+                MaximumWidthRequest="200">
+
+            
+        </Button>
+
+
+
+    </Grid>
+
+</ContentPage>

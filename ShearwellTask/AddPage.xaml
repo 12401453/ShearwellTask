@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ShearwellTask.AddPage"
+             xmlns:viewmodels="clr-namespace:ShearwellTask"
+             x:DataType="viewmodels:AddViewModel"
+             BackgroundColor="#172136">
+    
+    <ContentPage.BindingContext>
+        <viewmodels:AddViewModel/>
+    </ContentPage.BindingContext>
+
+    <Grid RowDefinitions="30, 50, *, 50, *, 90"
+      ColumnDefinitions="*"
+      Padding="10"
+      RowSpacing="10"
+      ColumnSpacing="10"
+      Margin="0,30,0,0">
+
+        <Label Text="Tag Number:" FontFamily="OpenSansRegular" FontSize="19"/>
+
+        <Border Stroke="Black" StrokeShape="Rectangle" Grid.Row="1" HorizontalOptions="Center">
+        <Grid  RowDefinitions="*" ColumnDefinitions="40,81,64" HorizontalOptions="Center" BackgroundColor="#071022">
+            <Entry TextColor="#cbd9f4" MaxLength="2" Keyboard="Numeric" Grid.Column="0" HorizontalTextAlignment="Center" Text="GB" IsReadOnly="True" IsEnabled="False"/>
+            <Entry Text="{Binding TagFirstPart}" TextColor="#cbd9f4" MaxLength="7" Keyboard="Numeric" Placeholder="0000000" Grid.Column="1" HorizontalTextAlignment="Start"  PlaceholderColor="DarkGrey"/>
+                <Entry Text="{Binding TagSecondPart}" TextColor="#cbd9f4" MaxLength="5" Keyboard="Numeric" Placeholder="00000" Grid.Column="2" HorizontalTextAlignment="Start"  PlaceholderColor="DarkGrey"/>
+            
+        </Grid>
+        </Border>
+
+        <Border Stroke="Black" StrokeThickness="2" Grid.Row="2" VerticalOptions="End" BackgroundColor="#071022" StrokeShape="RoundRectangle 7">
+            <Grid RowDefinitions="*,*" ColumnDefinitions="*,*">
+                <RadioButton Content="Cow" Grid.Row="0" Grid.Column="0" GroupName="species" IsChecked="{Binding CowChecked}"/>
+                <RadioButton Content="Sheep" Grid.Row="0" Grid.Column="1" GroupName="species" IsChecked="{Binding SheepChecked}"/>
+                <RadioButton Content="Chicken" Grid.Row="1" Grid.Column="0" GroupName="species" IsChecked="{Binding ChickenChecked}"/>
+                <RadioButton Content="Pig" Grid.Row="1" Grid.Column="1" GroupName="species" IsChecked="{Binding PigChecked}"/>
+                
+            </Grid>
+        </Border>
+
+        <Border Stroke="Black" StrokeThickness="2" Grid.Row="3" VerticalOptions="End" BackgroundColor="#071022" StrokeShape="RoundRectangle 7">
+            <Grid RowDefinitions="*" ColumnDefinitions="*,*">
+                <RadioButton Content="Pet" Grid.Row="2" Grid.Column="0" GroupName="role" IsChecked="{Binding PetChecked}"/>
+                <RadioButton Content="Meat" Grid.Row="2" Grid.Column="1" GroupName="role" IsChecked="{Binding MeatChecked}"/>
+            </Grid>
+         </Border>
+
+
+    <Grid Grid.Row="4"  ColumnDefinitions="*,*" HorizontalOptions="Center" VerticalOptions="Center">
+                <Border Grid.Column="0" Stroke="#172136" BackgroundColor="#172136" Padding="10">
+                    <Label Text="Date of Birth: " VerticalOptions="Center" FontSize="19"/>
+                </Border>
+                <Border Grid.Column="1" Stroke="Black" StrokeThickness="2" StrokeShape="RoundRectangle 7" BackgroundColor="#071022" Padding="10">
+                    <DatePicker  MinimumDate="01/01/2000"
+                    FontFamily="Calibri"
+                    FontSize="19"
+                    TextColor="#cbd9f4"
+                    MaximumDate="12/31/2030"
+                    Date="{Binding SelectedDate}"/>
+                </Border>
+            </Grid>
+      
+
+        <Button Grid.Row="5"
+        BackgroundColor="Green"
+        TextColor="#cbd9f4"
+        BorderColor="Black"
+        BorderWidth="2"
+        Text="Add"
+        FontFamily="Calibri"
+        FontSize="19"
+        HeightRequest="60"
+        VerticalOptions="Start"
+        MaximumWidthRequest="200"
+        Command="{Binding AddNewAnimal}">
+
+
+        </Button>
+
+
+    </Grid>
+</ContentPage>

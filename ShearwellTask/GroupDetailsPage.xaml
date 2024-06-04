@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ShearwellTask.GroupDetailsPage"
+             xmlns:viewmodels="clr-namespace:ShearwellTask"
+             x:DataType="viewmodels:GroupDetailsViewModel"
+             BackgroundColor="#172136">
+
+    <ContentPage.BindingContext>
+        <viewmodels:GroupDetailsViewModel/>
+    </ContentPage.BindingContext>
+
+    
+
+    <ContentPage.Resources>
+        <DataTemplate x:Key="groupAnimalsTemplate" x:DataType="viewmodels:Animal">
+
+            <Grid Padding="0, 0" RowDefinitions="*" ColumnDefinitions="0.5*, 0.5*, 75, 75" BackgroundColor="#172136">
+
+                   <!-- <Frame Grid.Row="0" Grid.Column="0" Padding="0" CornerRadius="0" BorderColor="Black" BackgroundColor="#040a16">
+                        <Label Text="{Binding Id}" VerticalOptions="Center"/>
+                    </Frame> -->
+                <Frame Grid.Row="0" Grid.Column="0" Padding="0" CornerRadius="0" BorderColor="Black" BackgroundColor="#172136">
+                        <Label Text="{Binding Tag}" VerticalOptions="Center"/>
+                    </Frame>
+                <Frame Grid.Row="0" Grid.Column="1" Padding="0" CornerRadius="0" BorderColor="Black" BackgroundColor="#172136">
+                        <Label Text="{Binding DateOfBirthString}" VerticalOptions="Center"/>
+                    </Frame>
+
+                <Frame Grid.Row="0" Grid.Column="2" Padding="0" CornerRadius="0" BorderColor="Black" BackgroundColor="#172136">
+                    <Button Text="Remove"
+                        TextColor="White" BackgroundColor="#ff3377" BorderColor="Black" HeightRequest="40" WidthRequest="71" BorderWidth="2"
+                        CornerRadius="20"
+                                FontFamily="Calibri" FontSize="12"/>
+                </Frame>
+
+                <Frame Grid.Row="0" Grid.Column="3" Padding="0" CornerRadius="0" BorderColor="Black" BackgroundColor="#172136">
+                    <Button Text="Delete"
+                            HeightRequest="40" WidthRequest="71"
+                            TextColor="White" BackgroundColor="Red" BorderColor="Black"            BorderWidth="2" CornerRadius="20"
+                            FontFamily="Calibri" FontSize="12"/>
+                </Frame>
+
+
+            </Grid>
+      
+
+
+        </DataTemplate>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="50, *, 90"
+          ColumnDefinitions="*"
+          Padding="10"
+          RowSpacing="10"
+          Margin="0,30,0,0">
+
+        <Label Grid.Row="0" HorizontalOptions="Center" VerticalOptions="Center" Text="{Binding SelectedGroupName}" FontSize="23" />
+
+
+        <Border Grid.Row="1" StrokeShape="RoundRectangle 7" Stroke="Black" StrokeThickness="2" HorizontalOptions="Fill" BackgroundColor="#040a16" Padding="0" VerticalOptions="Start"
+                Margin="0,0,0,0">
+
+            <Grid RowDefinitions="50, *" ColumnDefinitions="0.5*, 0.5*,75, 75" >
+
+
+                <Frame Grid.Row="0" Grid.Column="0" Padding="0" CornerRadius="0" BorderColor="Black" BackgroundColor="#040a16">
+                    <Label Text="Tag" VerticalOptions="Center"/>
+                </Frame>
+                <Frame Grid.Row="0" Grid.Column="1" Padding="0" CornerRadius="0" BorderColor="Black" BackgroundColor="#040a16">
+                    <Label Text="Date of Birth" VerticalOptions="Center"/>
+                </Frame>
+
+                <Frame Grid.Row="0" Grid.Column="2" Padding="0" CornerRadius="0" BorderColor="Black" BackgroundColor="#040a16">
+                    <Label Text="Remove from group" VerticalOptions="Center"/>
+                </Frame>
+
+                <Frame Grid.Row="0" Grid.Column="3" Padding="0" CornerRadius="0" BorderColor="Black" BackgroundColor="#040a16">
+                    <Label Text="Delete entirely" VerticalOptions="Center"/>
+                </Frame>
+
+
+
+
+
+
+                <CollectionView Grid.Row="1" Grid.ColumnSpan="4"
+                            ItemTemplate="{StaticResource groupAnimalsTemplate}"
+                            ItemsSource="{Binding SelectedGroupAnimals}"
+                            VerticalScrollBarVisibility="Default">
+    
+
+
+                </CollectionView> 
+
+            </Grid>
+        </Border>
+
+        <Button Grid.Row="2"
+        BackgroundColor="#512bd4"
+        TextColor="#cbd9f4"
+        BorderColor="Black"
+        BorderWidth="2"
+        Text="Add to this group"
+        FontFamily="Calibri"
+        FontSize="19"
+        MaximumWidthRequest="200"
+        HeightRequest="60"
+        VerticalOptions="Center">
+
+
+        </Button>
+
+    </Grid>
+
+</ContentPage>
