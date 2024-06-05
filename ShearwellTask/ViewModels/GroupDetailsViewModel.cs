@@ -1,15 +1,22 @@
 ﻿
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Text.RegularExpressions;
+using System.Windows.Input;
 
 namespace ShearwellTask
 {
     [QueryProperty(nameof(SelectedGroupAnimals), "selected_group_animals")]
     [QueryProperty(nameof(SelectedGroupName), "selected_group_name")]
+    [QueryProperty(nameof(SelectedGroupFlag), "selected_group_flag")]
     public partial class GroupDetailsViewModel : INotifyPropertyChanged
     {
         public GroupDetailsViewModel() { }
 
         private Guid selected_group_guid;
+        
+        /*
         public Guid SelectedGroupGuid { 
             get => selected_group_guid; 
             set 
@@ -17,7 +24,9 @@ namespace ShearwellTask
                 selected_group_guid = value;
                 OnPropertyChanged(nameof(SelectedGroupGuid));
             } 
-        }
+        } */
+
+        public GroupFlags SelectedGroupFlag { get; set; }
 
         private string selected_group_name;
         public string SelectedGroupName { get => selected_group_name; 
@@ -27,40 +36,6 @@ namespace ShearwellTask
                 OnPropertyChanged(nameof(SelectedGroupName));
             } 
         }
-
-       /* private GroupFlags selected_group_flag;
-        public GroupFlags SelectedGroupFlag
-        {
-            get => selected_group_flag;
-            set
-            {
-                selected_group_flag = value;
-                switch(value)
-                {
-                    case GroupFlags.Pet:
-                        SelectedGroupName = "Pets";
-                        break;
-                    case GroupFlags.Meat:
-                        SelectedGroupName = "Meat Animals";
-                        break;
-                    case GroupFlags.Cow:
-                        SelectedGroupName = "Cows";
-                        break;
-                    case GroupFlags.Chicken:
-                        SelectedGroupName = "Chickens";
-                        break;
-                    case GroupFlags.Pig:
-                        SelectedGroupName = "Pigs";
-                        break;
-                    case GroupFlags.Sheep:
-                        SelectedGroupName = "Sheep";
-                        break;
-
-                }
-                OnPropertyChanged(nameof(SelectedGroupFlag));
-            }
-        } */
-
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -73,13 +48,51 @@ namespace ShearwellTask
             }
         }
 
+
+        public ICommand RemoveAnimalFromGroup => new Command<Animal>(async (Animal removed_animal) =>
+        {
+            //this is totally stupid but I can't get ObservableCollections to work and this is the only way I can get the lists to update dynamically
+            SelectedGroupAnimals.Remove(removed_animal);
+            var new_selected_group = SelectedGroupAnimals;
+            SelectedGroupAnimals = new List<Animal>();
+            SelectedGroupAnimals = new_selected_group;
+
+            removed_animal.RemoveGroup(SelectedGroupFlag);
+            await App.AnimalsDB.UpdateAnimalAsync(removed_animal);
+        });
+
+        public ICommand DeleteAnimalEntirely => new Command<Animal>(async (Animal deleted_animal) =>
+        {
+            //this is totally stupid but I can't get ObservableCollections to work and this is the only way I can get the lists to update dynamically
+            SelectedGroupAnimals.Remove(deleted_animal);
+            var new_selected_group = SelectedGroupAnimals;
+            SelectedGroupAnimals = new List<Animal>();
+            SelectedGroupAnimals = new_selected_group;
+
+            await App.AnimalsDB.DeleteAnimalAsync(deleted_animal.Id);
+        });
+
+        public ICommand GroupDetailsBackCommand => new Command(async () =>
+        {
+            //I need to remake the GroupSummaryPage with the updated data when you use the back-button, but the GoToAsync() navigation here plays a forwards-animation which isn't good
+            var groups = await App.AnimalsDB.GetGroupsAsync();
+            List<int> group_membership_counts = await App.AnimalsDB.GetGroupsMemberCount();
+
+            for (int i = 0; i < groups.Count; i++)
+            {
+                groups[i].AnimalsCount = group_membership_counts[i];
+            }
+
+            var groups_parameter = new ShellNavigationQueryParameters { { "groups", groups } };
+            await Shell.Current.GoToAsync(nameof(GroupSummaryPage), groups_parameter);
+        });
+
+
         void OnPropertyChanged(string name)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
-
-        private List<Animal> _group_animals = new List<Animal> { new Animal("GB0000000 00001", new DateTime(2021, 3, 14), GroupFlags.Pet), new Animal("GB0000000 00002", new DateTime(2021, 4, 11), GroupFlags.Pig) };
-         public List<Animal> GroupAnimals { get => _group_animals; }
+        
 
 
         private List<Animal> selected_group_animals;
@@ -92,5 +105,6 @@ namespace ShearwellTask
                 OnPropertyChanged(nameof(SelectedGroupAnimals));
             }
         }
+        
     }
 }

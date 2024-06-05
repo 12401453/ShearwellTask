@@ -10,6 +10,10 @@
         <viewmodels:GroupSummaryViewModel/>
     </ContentPage.BindingContext>
 
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior Command="{Binding GroupSummaryBackCommand}"/>
+    </Shell.BackButtonBehavior>
+
     <ContentPage.Resources>
         <DataTemplate x:Key="groupsSummaryTemplate" x:DataType="viewmodels:Group">
             <Border BackgroundColor="#071022" 

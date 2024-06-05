@@ -7,7 +7,7 @@
         {
             InitializeComponent();
             BindingContext = vm;
-            AppShell.SetNavBarIsVisible(this, false);
+            //AppShell.SetNavBarIsVisible(this, false);
         }
 
         private async void AddButtonPressed(object sender, EventArgs e)

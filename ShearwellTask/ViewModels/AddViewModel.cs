@@ -1,6 +1,7 @@
 ﻿
 
 using System.ComponentModel;
+using System.Text.RegularExpressions;
 using System.Windows.Input;
 
 namespace ShearwellTask
@@ -18,6 +19,7 @@ namespace ShearwellTask
         public string TagFirstPart { get => _tagFirstPart;
             set 
             {
+                if (!Regex.IsMatch(value, "^[0-9]+$") && value.Length > 0) value = value.Substring(0, value.Length - 1); //there's probably a better way to enforce numeric input
                 _tagFirstPart = value;
                 OnPropertyChanged(nameof(TagFirstPart));
             } 
@@ -28,6 +30,7 @@ namespace ShearwellTask
             get => _tagSecondPart;
             set
             {
+                if (!Regex.IsMatch(value, "^[0-9]+$") && value.Length > 0) value = value.Substring(0, value.Length - 1);
                 _tagSecondPart = value;
                 OnPropertyChanged(nameof(TagSecondPart));
             }
@@ -122,10 +125,20 @@ namespace ShearwellTask
             GroupFlags role_group_flag = (GroupFlags)role_flag_value;
             GroupFlags species_group_flag = (GroupFlags)species_flag_value;
 
-            string tag = "GB" + TagFirstPart + " " + TagSecondPart;
+            string padded_tagFirst = TagFirstPart.PadLeft(7, '0');
+            string padded_tagSecond = TagSecondPart.PadLeft(5, '0');
+      
+
+
+            string tag = "GB" + padded_tagFirst + " " + padded_tagSecond;
             Animal new_animal = new Animal(tag, SelectedDate, role_group_flag | species_group_flag);
 
-            await App.AnimalsDB.InsertNewAnimalAsync(new_animal);
+            string insert_message = await App.AnimalsDB.InsertNewAnimalAsync(new_animal);
+            if (insert_message != string.Empty) //this is bad because it will run even if something completely different caused a DB exception
+            {
+                await Shell.Current.DisplayAlert("Animal already recorded!", "Please enter a different tag-number", "OK");
+                return;
+            }
 
 
             var groups = await App.AnimalsDB.GetGroupsAsync();

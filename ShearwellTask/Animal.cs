@@ -32,12 +32,12 @@ namespace ShearwellTask
         [Ignore]
         public bool EvenOrOdd { get; set; }
 
-        void AddGroup(GroupFlags group)
+        public void AddGroup(GroupFlags group)
         {
             GroupMembership = GroupMembership | group;
         }
 
-        void RemoveGroup(GroupFlags group)
+        public void RemoveGroup(GroupFlags group)
         {                                       //this bracketed bit equals zero if the Animal does not already have the `group` flag assigned, and anything XOR'd with zero is unchanged
             GroupMembership = GroupMembership ^ (GroupMembership & group);
         }

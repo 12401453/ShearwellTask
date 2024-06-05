@@ -1,5 +1,6 @@
 ﻿
 
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
 
@@ -33,11 +34,24 @@ namespace ShearwellTask
         public ICommand GroupTappedCommand => new Command<GroupFlags>(async (GroupFlags group_flag) => {
 
             List<Animal> selected_group_animals = await App.AnimalsDB.GetAnimalsByGroupAsync(group_flag);
-            string selected_group_name = await App.AnimalsDB.GetGroupNamesByGroupFlagAsync(group_flag);
-            var selected_group_parameter = new ShellNavigationQueryParameters { { "selected_group_animals", selected_group_animals }, {"selected_group_name", selected_group_name } };
+            /*ObservableCollection<Animal> observable_animals = new();
+            foreach(var annie in selected_group_animals)
+            {
+                observable_animals.Add(annie);
+            }*/
+
+            string selected_group_name = await App.AnimalsDB.GetGroupNameByGroupFlagAsync(group_flag);
+            var selected_group_parameter = new ShellNavigationQueryParameters { { "selected_group_animals", selected_group_animals }, 
+                {"selected_group_name", selected_group_name },
+                {"selected_group_flag", group_flag } };
+            //var selected_group_parameter = new ShellNavigationQueryParameters { { "selected_group_animals", observable_animals }, { "selected_group_name", selected_group_name } };
 
             await Shell.Current.GoToAsync(nameof(GroupDetailsPage), selected_group_parameter);
-            //await Shell.Current.GoToAsync($"{nameof(GroupDetailsPage)}?selected_group_id={group_id}");
+        });
+
+        public ICommand GroupSummaryBackCommand => new Command(async () =>
+        {
+            await Shell.Current.GoToAsync("//MainPage");
         });
 
     }

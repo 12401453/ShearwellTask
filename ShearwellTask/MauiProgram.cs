@@ -16,7 +16,9 @@ namespace ShearwellTask
                     fonts.AddFont("calibri.ttf", "Calibri");
                 });
 
-            
+            builder.Services.AddSingleton<MainPage>();
+       
+
             builder.Services.AddTransient<GroupSummaryPage>();
             builder.Services.AddTransient<GroupSummaryViewModel>();
 

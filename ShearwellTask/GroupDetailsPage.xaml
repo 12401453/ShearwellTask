@@ -10,7 +10,12 @@
         <viewmodels:GroupDetailsViewModel/>
     </ContentPage.BindingContext>
 
-    
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior Command="{Binding GroupDetailsBackCommand}"/>
+    </Shell.BackButtonBehavior>
+ 
+
+
 
     <ContentPage.Resources>
         <DataTemplate x:Key="groupAnimalsTemplate" x:DataType="viewmodels:Animal">
@@ -31,14 +36,18 @@
                     <Button Text="Remove"
                         TextColor="White" BackgroundColor="#ff3377" BorderColor="Black" HeightRequest="40" WidthRequest="71" BorderWidth="2"
                         CornerRadius="20"
-                                FontFamily="Calibri" FontSize="12"/>
+                                FontFamily="Calibri" FontSize="12"
+                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:GroupDetailsViewModel}}, Path=RemoveAnimalFromGroup}"
+                            CommandParameter="{Binding .}"/>
                 </Frame>
 
                 <Frame Grid.Row="0" Grid.Column="3" Padding="0" CornerRadius="0" BorderColor="Black" BackgroundColor="#172136">
                     <Button Text="Delete"
                             HeightRequest="40" WidthRequest="71"
                             TextColor="White" BackgroundColor="Red" BorderColor="Black"            BorderWidth="2" CornerRadius="20"
-                            FontFamily="Calibri" FontSize="12"/>
+                            FontFamily="Calibri" FontSize="12"
+                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:GroupDetailsViewModel}}, Path=DeleteAnimalEntirely}"
+                            CommandParameter="{Binding .}"/>
                 </Frame>
 
 
@@ -101,12 +110,13 @@
         TextColor="#cbd9f4"
         BorderColor="Black"
         BorderWidth="2"
-        Text="Add to this group"
+        Text="Add new animal"
         FontFamily="Calibri"
         FontSize="19"
         MaximumWidthRequest="200"
         HeightRequest="60"
-        VerticalOptions="Center">
+        VerticalOptions="Center"
+         Pressed="AddButtonPressed">
 
 
         </Button>
